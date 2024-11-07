@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/ExpenseTracker2/styles/index.css">
+    <title>Expense Tracker</title>
+</head>
+<body>  
+
+    <form method="get">
+        <label for="userinput">Enter User id:</label>
+        <input type="number" id="userinput">
+        <button type="button" onclick="changeUser()">Set id</button>
+    </form>
+    <h2>Add a User</h2>
+    <form method="get">
+        <label for="userinput">Enter User id:</label>
+        <input type="text" id="usernamecreate">
+        <input type="number" id="budgetcreate">
+        <button type="button" onclick="createUser()">Set id</button>
+    </form>
+
+    <div>
+        <label for="budgetInput">Enter Budget:</label>
+        <input type="number" id="budgetInput">
+        <button type="button" onclick="">Set Budget</button>
+    </div>
+    
+    <div id="budgetDisplay"></div>
+    
+    <h2>Add a Transaction</h2>
+    <form id="transactionForm">
+        <div class="form-group">
+            <label for="price">Price:</label>
+            <input type="number" id="price" required>
+        </div>
+        <div class="form-group">
+            <label for="type">Type:</label>
+            <select id="type" required>
+                <option value="income">Income</option>
+                <option value="expense">Expense</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="date">Date:</label>
+            <input type="date" id="date" required>
+        </div>
+        <button type="button" onclick="">Add Transaction</button>
+    </form>
+
+    <h2>All Transactions</h2>
+    <button type="button" onclick="">Show Transactions</button>
+    <table id="transactionsTable">
+        <thead>
+            <tr>
+                <th>Price</th>
+                <th>Type</th>
+                <th>Date</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody id="transactionsDetail">
+        </tbody>
+    </table>
+
+    <h2>Filters</h2>
+    <div class="form-group">
+        <label for="filterType">Filter by Type:</label>
+        <select id="filterType">
+            <option value="">Select type</option>
+            <option value="income">Income</option>
+            <option value="expense">Expense</option>
+        </select>
+        <button type="button" onclick="">Apply</button>
+    </div>
+    
+    <div class="form-group">
+        <label for="filterDate">Filter by Date:</label>
+        <input type="date" id="filterDate">
+        <button type="button" onclick="">Apply</button>
+    </div>
+
+    <div class="form-group">
+        <label for="minPrice">Min Price:</label>
+        <input type="number" id="minPrice">
+        <label for="maxPrice">Max Price:</label>
+        <input type="number" id="maxPrice">
+        <button type="button" onclick="">Apply</button>
+    </div>
+
+    <script src="/ExpenseTracker2/scripts/index.js"></script>
+</body>
+</html>
