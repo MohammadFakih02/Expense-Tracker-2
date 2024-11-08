@@ -7,20 +7,25 @@
     <title>Expense Tracker</title>
 </head>
 <body>  
+    <h1 id="iddisplay"></h1>
     <h1 id="usernamedisplay">username</h1>
     <h1 id="budgetDisplay"></h1>
     <form method="get">
         <label for="userinput">Enter User id:</label>
         <input type="number" id="userinput">
-        <button type="button" onclick="changeUser()">Set id</button>
+        <label for="userinput">Enter User password:</label>
+        <input type="password" id="passwordinput">
+        <button type="button" onclick="changeUser()">Login</button>
     </form>
     <h2>Add a User</h2>
     <form method="get">
         <label for="usernamecreate">Enter Username:</label>
         <input type="text" id="usernamecreate">
+        <label for="userinput">Enter User password:</label>
+        <input type="password" id="passwordcreate">
         <label for="budgetcreate">Enter User budget:</label>
         <input type="number" id="budgetcreate">
-        <button type="button" onclick="createUser()">Set id</button>
+        <button type="button" onclick="createUser()">Create User</button>
     </form>
 
     <div>

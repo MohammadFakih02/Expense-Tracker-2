@@ -7,8 +7,9 @@ class Transaction {
   }
 }
 class User{
-    constructor(name,budget){
+    constructor(name,password,budget){
         this.name=name;
+        this.password = password;
         this.budget=budget;
     }
 }
@@ -17,7 +18,15 @@ let userId;
 
 const changeUser = ()=>{
   userId = document.getElementById("userinput").value;
-  fetch(`/ExpenseTracker2/php/selectuser.php?user_id=${userId}`)
+  const password= document.getElementById("passwordinput").value;
+  console.log(JSON.stringify({userId,password}));
+  fetch(`/ExpenseTracker2/php/login.php`,{
+    method:'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({userId,password}),
+  })
   .then(response => {
       if (response.ok) {
           return response.json();
@@ -30,8 +39,10 @@ const changeUser = ()=>{
         console.log("not found");
       } else {
           console.log("User data loaded:", data);
-          document.getElementById("budgetDisplay").innerText = `Budget: ${data.budget}`;
-          document.getElementById("usernamedisplay").innerText = `Name: ${data.name}`;
+          document.getElementById("budgetDisplay").innerText = `Budget: ${data.data.budget}`;
+          document.getElementById("usernamedisplay").innerText = `Name: ${data.data.username}`;
+          userId = data.data.user_id;
+         document.getElementById("iddisplay").innerText = `Logged in as ID: ${userId}`;
       }
   })
   .catch(error => {
@@ -39,30 +50,39 @@ const changeUser = ()=>{
   });
 }
 
-const createUser = ()=>{
-  let username = document.getElementById("usernamecreate").value;
-  let budget = document.getElementById("budgetcreate").value;
-  document.getElementById("budgetDisplay").innerText = `Budget: ${budget}`;
-  document.getElementById("usernamedisplay").innerText = `Name: ${username}`;
-  let newuser= new User(username,budget);
-  fetch('/ExpenseTracker2/php/createuser.php', {
-    method: 'POST',
-    headers:{
-        'Content-Type': 'application/json'
-    },
-    body:JSON.stringify(newuser)
-})
-.then(response => {
-    if (response.ok) {
-        return response.json();
-    } else {
-        throw new Error("Failed to retrieve user data.");
-    }
-})
-.then(data => {
-    userId = data.data.user_id;
-})
-}
+const createUser = () => {
+    const username = document.getElementById("usernamecreate").value;
+    const password = document.getElementById("passwordcreate").value;
+    const budget = document.getElementById("budgetcreate").value;
+  
+    document.getElementById("budgetDisplay").innerText = `Budget: ${budget}`;
+    document.getElementById("usernamedisplay").innerText = `Name: ${username}`;
+  
+    const newUser = new User(username, password, budget);
+    console.log(JSON.stringify(newUser))
+  
+    fetch('/ExpenseTracker2/php/createuser.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newUser),
+    })
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error("Failed to create user.");
+        }
+      })
+      .then(data => {
+        userId = data.data.user_id;
+        document.getElementById("iddisplay").innerText = `Your ID is ${userId}`;
+      })
+      .catch(error => {
+        console.error("Error:", error);
+      });
+  };
 
 const changeBudget = () => {
     if (!userId) {
