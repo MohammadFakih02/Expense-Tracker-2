@@ -99,3 +99,38 @@ const changeBudget = () => {
         console.error("Error:", error);
     });
 };
+
+function addTransaction() {
+    if (!userId) {
+        console.error("User ID is not set. Create or select a user first.");
+        return;
+    }
+
+    const price = document.getElementById('price').value;
+    const type = document.getElementById('type').value;
+    const date = document.getElementById('date').value;
+    const transaction = new Transaction(price, type, date, userId);
+
+
+    fetch('/ExpenseTracker2/php/createtransaction.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(transaction)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Transaction added successfully:', data);
+        changeUser();
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
