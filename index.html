@@ -51,7 +51,7 @@
     </form>
 
     <h2>All Transactions</h2>
-    <button type="button" onclick="">Show Transactions</button>
+    <button type="button" onclick="getTransactions()">Show Transactions</button>
     <table id="transactionsTable">
         <thead>
             <tr>
@@ -66,29 +66,30 @@
     </table>
 
     <h2>Filters</h2>
-    <div class="form-group">
-        <label for="filterType">Filter by Type:</label>
-        <select id="filterType">
-            <option value="">Select type</option>
-            <option value="income">Income</option>
-            <option value="expense">Expense</option>
-        </select>
-        <button type="button" onclick="">Apply</button>
-    </div>
-    
-    <div class="form-group">
-        <label for="filterDate">Filter by Date:</label>
-        <input type="date" id="filterDate">
-        <button type="button" onclick="">Apply</button>
-    </div>
+<div class="form-group">
+    <label for="filterType">Filter by Type:</label>
+    <select id="filterType">
+        <option value="">Select type</option>
+        <option value="income">Income</option>
+        <option value="expense">Expense</option>
+    </select>
+    <button type="button" onclick="applyFilters()">Apply</button>
+</div>
 
-    <div class="form-group">
-        <label for="minPrice">Min Price:</label>
-        <input type="number" id="minPrice">
-        <label for="maxPrice">Max Price:</label>
-        <input type="number" id="maxPrice">
-        <button type="button" onclick="">Apply</button>
-    </div>
+<div class="form-group">
+    <label for="filterDate">Filter by Date:</label>
+    <input type="date" id="filterDate">
+    <button type="button" onclick="applyFilters()">Apply</button>
+</div>
+
+<div class="form-group">
+    <label for="minPrice">Min Price:</label>
+    <input type="number" id="minPrice">
+    <label for="maxPrice">Max Price:</label>
+    <input type="number" id="maxPrice">
+    <button type="button" onclick="applyFilters()">Apply</button>
+</div>
+
 
     <script src="/ExpenseTracker2/scripts/index.js"></script>
 </body>

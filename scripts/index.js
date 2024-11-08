@@ -27,7 +27,7 @@ const changeUser = ()=>{
   })
   .then(data => {
       if (data.message === "not found") {
-          alert(data.message);
+        console.log("not found");
       } else {
           console.log("User data loaded:", data);
           document.getElementById("budgetDisplay").innerText = `Budget: ${data.budget}`;
@@ -98,7 +98,7 @@ const changeBudget = () => {
     .catch(error => {
         console.error("Error:", error);
     });
-};
+}
 
 function addTransaction() {
     if (!userId) {
@@ -126,7 +126,7 @@ function addTransaction() {
         return response.json();
     })
     .then(data => {
-        console.log('Transaction added successfully:', data);
+        getTransactions();
         changeUser();
     })
     .catch(error => {
@@ -134,3 +134,119 @@ function addTransaction() {
     });
 }
 
+const getTransactions = ()=>{
+    if (!userId) {
+        console.error("User ID is not set. Create or select a user first.");
+        return;
+    }
+    let tableBody = document.getElementById("transactionsDetail");
+    tableBody.innerHTML = "";
+    fetch(`/ExpenseTracker2/php/gettransactions.php?userId=${userId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            
+            data.forEach(element => {
+                let tablerow = `<tr>
+                <td>${element.price}</td>
+                <td>${element.type}</td>
+                <td>${element.date}</td>
+                <td><button type="button" onclick="deleteTransaction(${element.id})">delete</button></td>
+            </tr>`;
+            tableBody.innerHTML += tablerow;       
+            });
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+
+const deleteTransaction = (id) => {
+    if (!id) {
+        console.error("ID is required to delete a transaction.");
+        return;
+    }
+
+    fetch('/ExpenseTracker2/php/deletetransaction.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ id: id })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        getTransactions();
+        console.log('Transaction deleted:');
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+};
+
+
+function showTransactions(transactions) {
+    let tableBody = document.getElementById("transactionsDetail");
+    tableBody.innerHTML = "";
+
+    transactions.forEach(transaction => {
+        let tablerow = `<tr>
+                <td>${transaction.price}</td>
+                <td>${transaction.type}</td>
+                <td>${transaction.date}</td>
+                <td><button type="button" onclick="deleteTransaction(${transaction.id})">Delete</button></td>
+            </tr>`;
+        tableBody.innerHTML += tablerow;
+    });
+}
+
+function applyFilters() {
+    const filterType = document.getElementById('filterType').value;
+    const filterDate = document.getElementById('filterDate').value;
+    const minPrice = document.getElementById('minPrice').value;
+    const maxPrice = document.getElementById('maxPrice').value;
+
+    let url = `/ExpenseTracker2/php/gettransactions.php?userId=${userId}`;
+
+    if (filterType) url += `&type=${filterType}`;
+    if (filterDate) url += `&date=${filterDate}`;
+    if (minPrice) url += `&minPrice=${minPrice}`;
+    if (maxPrice) url += `&maxPrice=${maxPrice}`;
+
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            if (data && data.length > 0) {
+                showTransactions(data);
+            } else {
+                console.log("No transactions found");
+            }
+        })
+        .catch(error => {
+            console.error("Error fetching filtered transactions:", error);
+        });
+}
+
+function showTransactions(transactions) {
+    let tableBody = document.getElementById("transactionsDetail");
+    tableBody.innerHTML = "";
+
+    transactions.forEach(transaction => {
+        let tablerow = `<tr>
+                <td>${transaction.price}</td>
+                <td>${transaction.type}</td>
+                <td>${transaction.date}</td>
+                <td><button type="button" onclick="deleteTransaction(${transaction.id})">Delete</button></td>
+            </tr>`;
+        tableBody.innerHTML += tablerow;
+    });
+}
