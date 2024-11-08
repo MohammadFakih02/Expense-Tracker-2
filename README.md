@@ -19,6 +19,8 @@ CREATE TABLE `transactions` (
   CONSTRAINT `foreign_key` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
 
+ALTER TABLE users ADD password VARCHAR(255);
+
 CREATE DEFINER=`root`@`localhost` TRIGGER `change_budget` AFTER INSERT ON `transactions` FOR EACH ROW BEGIN
     IF NEW.type = 'expense' THEN
         UPDATE users
