@@ -6,11 +6,11 @@ class Transaction {
     this.userId = userId;
   }
 }
-class User {
-  constructor(name,budget){
-    this.name=name;
-    this.budget=budget;
-  }
+class User{
+    constructor(name,budget){
+        this.name=name;
+        this.budget=budget;
+    }
 }
 
 const changeUser = ()=>{
@@ -29,6 +29,7 @@ const changeUser = ()=>{
       } else {
           console.log("User data loaded:", data);
           document.getElementById("budgetDisplay").innerText = `Budget: ${data.budget}`;
+          document.getElementById("usernamedisplay").innerText = `Name: ${data.name}`;
       }
   })
   .catch(error => {
@@ -39,13 +40,15 @@ const changeUser = ()=>{
 const createUser = ()=>{
   let username = document.getElementById("usernamecreate").value;
   let budget = document.getElementById("budgetcreate").value;
-  let createdUser=new User(username,budget);
+  document.getElementById("budgetDisplay").innerText = `Budget: ${budget}`;
+  document.getElementById("usernamedisplay").innerText = `Name: ${username}`;
+  let newuser= new User(username,budget);
   fetch('/ExpenseTracker2/php/createuser.php', {
     method: 'POST',
-    headers: {
+    headers:{
         'Content-Type': 'application/json'
     },
-    body: JSON.stringify(data)
+    body:JSON.stringify(newuser)
 })
 .then(response => {
     if (response.ok) {
