@@ -13,8 +13,10 @@ class User{
     }
 }
 
+let userId;
+
 const changeUser = ()=>{
-  let userId = document.getElementById("userinput").value;
+  userId = document.getElementById("userinput").value;
   fetch(`/ExpenseTracker2/php/selectuser.php?user_id=${userId}`)
   .then(response => {
       if (response.ok) {
@@ -57,4 +59,43 @@ const createUser = ()=>{
         throw new Error("Failed to retrieve user data.");
     }
 })
+.then(data => {
+    userId = data.data.user_id;
+})
 }
+
+const changeBudget = () => {
+    if (!userId) {
+        console.error("User ID is not set. Create or select a user first.");
+        return;
+      }
+    const budget = document.getElementById("budgetInput").value;
+    document.getElementById("budgetDisplay").innerText = `Budget: ${budget}`;
+    console.log(userId);
+
+    const data = {
+        user_id: userId,
+        budget: budget
+    };
+
+    fetch('/ExpenseTracker2/php/updatebudget.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            throw new Error("Failed to update budget.");
+        }
+    })
+    .then(data => {
+        console.log("Budget updated successfully:", data);
+    })
+    .catch(error => {
+        console.error("Error:", error);
+    });
+};

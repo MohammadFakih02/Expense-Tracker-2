@@ -11,10 +11,12 @@ if (isset($data['name']) && isset($data['budget'])) {
     $query->bind_param("ss", $username, $budget);
 
     if($query->execute()){
+        $user_id = $connection->insert_id;
     $response = [
         'success' => true,
         'message' => 'User created successfully',
         'data' => [
+            'user_id' => $user_id,
             'username' => $username,
             'budget' => $budget
         ]
